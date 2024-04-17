@@ -1,0 +1,41 @@
+version: '3.8'                                       # this line specifies the version of the Docker Compose file format which is being used
+services:                                            # this line begins the section defining Docker services
+  app:                                               # this line defines the first service named 'app'.
+    build: .                                         # this line specifies to build the docker image using the dockerfile in the current directory.
+    image: rk1597/node-web-app:1.1.1                 # this line specifies the image to use for the container
+    ports:                                           # this line Defines port mappings between host and container
+      - '3040:3040'                                  # this line maps host port 3040 to container port 3040.
+    environment:                                     # this line sets environment variables inside the container.
+      - PORT=3040                                    # this line defines the PORT environment variable with a value of 3040.
+    container_name: my-application1                  # this line sets the name of the container to 'my-application1'.
+    networks:                                        # this line specifies the networks the container should be connected to
+      - my-net                                       # this line connects the container to the 'my-net' network
+    healthcheck:                                     # this line configures health checks for the container
+      test: ["CMD", "curl", "-f", "http://localhost:3040/"]      # health check command using curl to check if the application on port 3040 is reachable
+      interval: 10s                                            # it sets the interval between health checks to 10 seconds
+      timeout: 5s                                               # it sets the timeout for each health check request to 5 seconds
+      retries: 3                                                 # it specifies the number of retries before considering the container unhealthy
+      start_period: 30s                                            # it sets the delay before starting health checks after container start.
+    restart: on-failure                                           # it sets the restart policy to restart the container if it fails.
+
+  app1:                                                        # this line defines the first service named 'app1'.
+    build: .                                                   # this line specifies to build the docker image using the dockerfile in the current directory.
+    image: rk1597/node-web-app:1.1.1                           # this line specifies the image to use for the container
+    ports:                                                     # this line Defines port mappings between host and container
+      - '3041:3040'                                            # this line maps host port 3041 to container port 3040.
+    environment:                                               # this line sets environment variables inside the container.
+      - PORT=3040                                              # this line defines the PORT environment variable with a value of 3040.
+    container_name: my-application2                            # this line sets the name of the container to 'my-application2'.
+    networks:                                                  # this line specifies the networks the container should be connected to
+      - my-net                                                  # this line connects the container to the 'my-net' network
+    healthcheck:                                                # this line configures health checks for the container
+      test: ["CMD", "curl", "-f", "http://localhost:3040/"]       # health check command using curl to check if the application on port 3040 is reachable
+      interval: 10s                                            # it sets the interval between health checks to 10 seconds
+      timeout: 5s                                                # it sets the timeout for each health check request to 5 seconds
+      retries: 3                                                  # it specifies the number of retries before considering the container unhealthy
+      start_period: 30s                                             # it sets the delay before starting health checks after container start.
+    restart: on-failure                                              # it sets the restart policy to restart the container if it fails.
+
+networks:                                                          # it defines the networks section for configuring Docker networks
+  my-net:                                                          # it defines the network named 'my-net'
+    driver: bridge                                                  # it specifies the network driver to use in this case the bridge driver
